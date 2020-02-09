@@ -1,7 +1,7 @@
 package com.hefny.hady.bit68task.welcome_screens;
 
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
@@ -13,14 +13,28 @@ import com.hefny.hady.bit68task.ui.MainActivity;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN;
+
 public class WelcomeScreen extends OnboarderActivity {
 
     private List<OnboarderPage> onboarderPages;
-    Drawable drawable;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor editor;
+    private static final String KEY = "FIRST_LOGIN_KEY";
+    private static final String TAG = "WelcomeScreen";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().setFlags(FLAG_FULLSCREEN, FLAG_FULLSCREEN);
+        sharedPreferences = getPreferences(MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        if (sharedPreferences.getBoolean(KEY, false)) {
+            launchMainActivity();
+        }
+        editor.putBoolean(KEY, true);
+        editor.apply();
+
         onboarderPages = new ArrayList<>();
 
         OnboarderPage onboarderPage1 = new OnboarderPage.Builder()
@@ -54,6 +68,10 @@ public class WelcomeScreen extends OnboarderActivity {
     @Override
     public void onFinishButtonPressed() {
         // Define your actions when the user press 'Finish' button
+        launchMainActivity();
+    }
+
+    private void launchMainActivity() {
         startActivity(new Intent(WelcomeScreen.this, MainActivity.class));
         finish();
     }

@@ -13,8 +13,12 @@
         android:roundIcon="@mipmap/bit68"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".welcome_screens.WelcomeScreen"></activity>
-        <activity android:name=".welcome_screens.SplashScreen">
+        <activity
+            android:name=".welcome_screens.WelcomeScreen"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".welcome_screens.SplashScreen"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
