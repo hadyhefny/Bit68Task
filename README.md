@@ -1,9 +1,21 @@
 # Bit68Task
  
-This demo was created using the following technology stack and adhering to google achitecture guidlines:
+This demo was created adhering to google achitecture guidlines and using the following technology stack:
+
 -Java
+
 -MVVM architecture pattern
+
+-LiveData
+
 -Dagger2 framework
+
 -RxJava & RxAndroid
+
 -Retrofit
+
 -Material design components
+
+-Navigation architecture component
+
+-Glide library
