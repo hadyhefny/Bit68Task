@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,7 +24,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import dagger.android.support.DaggerAppCompatActivity;
 import dagger.android.support.DaggerFragment;
 
 public class ProductsFragment extends DaggerFragment implements OnItemListener {
@@ -53,7 +51,6 @@ public class ProductsFragment extends DaggerFragment implements OnItemListener {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ((DaggerAppCompatActivity) getActivity()).setSupportActionBar((Toolbar) view.findViewById(R.id.products_toolbar));
         recyclerView = view.findViewById(R.id.recyclerview_products);
         viewModel = viewModelProviderFactory.create(SharedViewModel.class);
         initRecyclerView();
