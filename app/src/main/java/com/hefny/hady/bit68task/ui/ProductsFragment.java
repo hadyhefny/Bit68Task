@@ -56,9 +56,9 @@ public class ProductsFragment extends DaggerFragment implements OnItemListener {
         initRecyclerView();
         observeProducts();
 
-        if (!((MainActivity) getActivity()).checkInternet()) {
-            ((MainActivity) getActivity()).showError();
-        }
+//        if (!((MainActivity) getActivity()).checkInternet()) {
+//            ((MainActivity) getActivity()).showError();
+//        }
     }
 
     private void initRecyclerView() {
