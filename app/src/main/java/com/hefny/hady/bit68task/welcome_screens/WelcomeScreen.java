@@ -5,19 +5,19 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
-import com.cuneytayyildiz.onboarder.OnboarderActivity;
-import com.cuneytayyildiz.onboarder.OnboarderPage;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.tabs.TabLayout;
 import com.hefny.hady.bit68task.R;
 import com.hefny.hady.bit68task.ui.MainActivity;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN;
 
-public class WelcomeScreen extends OnboarderActivity {
+public class WelcomeScreen extends AppCompatActivity {
 
-    private List<OnboarderPage> onboarderPages;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
     private static final String KEY = "FIRST_LOGIN_KEY";
@@ -26,6 +26,7 @@ public class WelcomeScreen extends OnboarderActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_welcome_screen);
         getWindow().setFlags(FLAG_FULLSCREEN, FLAG_FULLSCREEN);
         sharedPreferences = getPreferences(MODE_PRIVATE);
         editor = sharedPreferences.edit();
@@ -35,40 +36,42 @@ public class WelcomeScreen extends OnboarderActivity {
         editor.putBoolean(KEY, true);
         editor.apply();
 
-        onboarderPages = new ArrayList<>();
+        PagerAdapter adapter = new PagerAdapter(getSupportFragmentManager(), FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        TabLayout tabLayout = findViewById(R.id.tabs);
+        ViewPager viewPager = findViewById(R.id.view_pager);
+        viewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(viewPager);
 
-        OnboarderPage onboarderPage1 = new OnboarderPage.Builder()
-                .title("page 1")
-                .description("page 1 of on boarding pages")
-                .imageResourceId(R.drawable.delivery)
-                .backgroundColorId(R.color.white)
-                .build();
+        MaterialButton skipButton = findViewById(R.id.btnSkip);
+        MaterialButton finishButton = findViewById(R.id.btnFinish);
 
-        OnboarderPage onboarderPage2 = new OnboarderPage.Builder()
-                .title("page 2")
-                .description("page 2 of on boarding pages")
-                .imageResourceId(R.drawable.food)
-                .backgroundColorId(R.color.white)
-                .build();
 
-        onboarderPages.add(onboarderPage1);
-        onboarderPages.add(onboarderPage2);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-        setDividerVisibility(View.GONE);
-        setSkipButtonHidden();
-        setFinishButtonTitle("Finish");
-        setFinishButtonBackgroundColor(R.color.red);
-        setNextButtonBackgroundColor(R.color.white);
-        setNextButtonTextColor(R.color.white);
-        setActiveIndicatorColor(R.color.red);
-        setInactiveIndicatorColor(android.R.color.darker_gray);
-        initOnboardingPages(onboarderPages);
-    }
+            }
 
-    @Override
-    public void onFinishButtonPressed() {
-        // Define your actions when the user press 'Finish' button
-        launchMainActivity();
+            @Override
+            public void onPageSelected(int position) {
+                if (position == adapter.getCount() - 1) {
+                    skipButton.setVisibility(View.GONE);
+                    finishButton.setVisibility(View.VISIBLE);
+                } else {
+                    skipButton.setVisibility(View.VISIBLE);
+                    finishButton.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        finishButton.setOnClickListener(l -> launchMainActivity());
+        skipButton.setOnClickListener(l -> launchMainActivity());
+
     }
 
     private void launchMainActivity() {
