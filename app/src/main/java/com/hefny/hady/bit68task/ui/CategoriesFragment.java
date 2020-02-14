@@ -8,13 +8,17 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.tabs.TabLayout;
 import com.hefny.hady.bit68task.R;
 import com.hefny.hady.bit68task.adapters.CategoriesAdapter;
 import com.hefny.hady.bit68task.adapters.OnItemListener;
+import com.hefny.hady.bit68task.ui.categories_view_pager.CategoriesPagerAdapter;
 import com.hefny.hady.bit68task.viewmodels.ViewModelProviderFactory;
 
 import javax.inject.Inject;
@@ -35,6 +39,8 @@ public class CategoriesFragment extends DaggerFragment implements OnItemListener
 
     // ui components
     private RecyclerView recyclerView;
+    private TabLayout tabLayout;
+    private ViewPager viewPager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,10 +53,20 @@ public class CategoriesFragment extends DaggerFragment implements OnItemListener
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = view.findViewById(R.id.recyclerview_categories);
+        tabLayout = view.findViewById(R.id.tabs_categories);
+        viewPager = view.findViewById(R.id.view_pager_categories);
         viewModel = viewModelProviderFactory.create(SharedViewModel.class);
         Log.d(TAG, "onViewCreated: categoryViewModel hashCode: " + viewModel.hashCode());
         initRecyclerView();
         observeCategories();
+        initViewPager();
+    }
+
+    private void initViewPager() {
+        CategoriesPagerAdapter adapter = new CategoriesPagerAdapter(getChildFragmentManager(),
+                FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        viewPager.setAdapter(adapter);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     private void initRecyclerView() {
